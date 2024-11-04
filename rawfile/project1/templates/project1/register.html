@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+nav {
+    width: 100%;
+    background-color: #008080;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #005f5f;
+    color: #ffcc00;
+}
+
+nav ul li a:active {
+    background-color: #004c4c;
+    color: #ffcc00;
+}
+
+
+h1, h2 {
+    color: #333;
+}
+
+p {
+    margin: 20px 0;
+}
+
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #008080;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px #999;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+    background-color:  #005f5f;
+}
+
+.btn:active {
+    background-color: #004c4c;
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
+}
+
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    margin: 20px auto;
+}
+
+form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form .form-group input {
+    width: calc(100% - 22px);
+    padding: 10px;
+}
+
+form .btn-primary {
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+a {
+    color: #008080;
+    text-decoration: none;
+    transition: color 0.3s;
+    margin-bottom:10px;
+}
+
+a:hover {
+    color:  #005f5f;
+}
+
+a:active {
+    color: #004080;
+}
+
+
+
+.errorlist {
+    color: red;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.errorlist li {
+    margin-bottom: 5px;
+}
+
+.helptext {
+    color: #666;
+    font-size: 12px;
+}
+
+
+</style>
+<nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <h2>Register</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+    <a href="{% url 'login' %}">Already have an account? Login here</a>
+</body>
+</html>

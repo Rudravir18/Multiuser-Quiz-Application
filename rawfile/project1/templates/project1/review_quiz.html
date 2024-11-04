@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Review</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+.question {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.question h2 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.answers {
+    margin: 10px 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.answers li {
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.answers .selected {
+    background-color: #e0f7f7;
+    color: #008080;
+}
+
+.answers .correct {
+    background-color: #e0f2e9;
+    color: #00a000;
+}
+
+.answers .incorrect {
+    background-color: #fde0e0;
+    color: #a00000;
+}
+
+.answers li::before {
+    content: '• ';
+    color: #333;
+    font-weight: bold;
+}
+
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #008080;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Review</h1>
+        {% if review_data %}
+            <ul>
+                {% for data in review_data %}
+                    <li class="question">
+                        <strong>Question:</strong> {{ data.question.text }}<br>
+                        <strong>Options:</strong>
+                        <ul class="answers">
+                            {% for answer in data.question.answers.all %}
+                                <li class="{% if answer == data.selected_answer %}selected{% elif answer == data.correct_answer %}correct{% else %}incorrect{% endif %}">
+                                    {{ answer.text }}{% if answer == data.selected_answer %} (Your Answer){% endif %}{% if answer == data.correct_answer %} (Correct Answer){% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No review data available.</p>
+        {% endif %}
+        <a href="{% url 'home' %}">Back to Home</a>
+    </div>
+</body>
+</html>

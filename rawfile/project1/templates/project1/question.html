@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+nav {
+    background-color: #008080;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.5em;
+}
+
+#timer {
+    font-size: 2em;
+    color: #008080;
+    text-align: center;
+    margin: 20px 0;
+}
+
+
+.progress-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    height: 30px;
+    background-color: #4caf50;
+    width: 0%;
+    text-align: center;
+    color: white;
+    line-height: 30px;
+    font-size: 16px;
+    transition: width 0.4s ease;
+}
+
+
+form {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+legend {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+div {
+    margin-bottom: 10px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #008080;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #006f6f;
+}
+
+
+a {
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+    color: #008080;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+    <h1>Question {{ question_number }} of {{ total_questions }}</h1>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="timer">10:00</div>
+
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{{ question.text }}</legend>
+            {% for answer in question.answers.all %}
+                <div>
+                    <input type="radio" id="a{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                    <label for="a{{ answer.id }}">{{ answer.text }}</label>
+                </div>
+            {% endfor %}
+        </fieldset>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'home' %}">Back to Home</a>
+
+    <script>
+    // Set the countdown time (1 minute)
+    let countdownTime = 1 * 60;
+    const timerElement = document.getElementById('timer');
+    const progressBar = document.getElementById('progress-bar');
+    const totalQuestions = {{ total_questions }};
+
+    function updateTimer() {
+        const minutes = Math.floor(countdownTime / 60);
+        const seconds = countdownTime % 60;
+
+        timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (countdownTime <= 0) {
+            clearInterval(timerInterval);
+            document.querySelector('form').submit();
+        } else {
+            countdownTime--;
+        }
+    }
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+    function updateProgressBar(currentQuestionIndex) {
+        const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+        progressBar.textContent = `${Math.round(progressPercentage)}% Complete`;
+    }
+    updateProgressBar({{ question_index }});
+    </script>
+</body>
+</html>
